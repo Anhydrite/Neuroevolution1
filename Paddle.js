@@ -8,10 +8,12 @@ class paddle{
         this.Pdx=Pdx;
         this.alive=true;
         this.score=0;
+        this.scoreFit=0;
+        this.fitness=0;
         if (brain) {
             this.brain = brain.copy();
           } else {
-            this.brain = new NeuralNetwork(8, 32, 3);
+            this.brain = new NeuralNetwork(7,30,3);
           }
     }
     
@@ -22,16 +24,8 @@ class paddle{
 
       
       
-      checkPosition(){
-          if(Boule.x > this.x && Boule.x < this.x +this.width && Boule.y>this.y && Boule.y <this.y + this.height){
-            this.score++;
-          }else{
-            if(this.alive==true){
-            this.alive="false";
-            PaddleRestant-=1;
-            }
-          }
-        }
+      
+      
       botMove(choix){
         if(choix=="droite"){
             if(this.x<canvas.width-this.width){
@@ -49,9 +43,7 @@ class paddle{
       }
       }
 
-  dispose() {
-    this.brain.dispose();
-  }
+
 
   mutate() {
     this.brain.mutate(0.1);
@@ -59,14 +51,14 @@ class paddle{
 
   think(balle) {
     let inputs = [];
-    inputs[0] = this.x;
-    inputs[1] = balle.x;
-    inputs[2] = balle.y;
-    inputs[3] = balle.dx;
-    inputs[4] = balle.dy;
-    inputs[6] = this.Pdx; //Paddle X
-    inputs[5] = 0;
-    inputs[7]=this.width;
+    inputs[0] = this.x; //100 : 3
+    inputs[1] = balle.x; // 100 : 2
+    inputs[2] = balle.y; // 100 : 2
+    inputs[3] = balle.dx; // 100 : 2
+    inputs[4] = balle.dy; // 100 : 3 tot
+    inputs[5] = this.Pdx; //Paddle X 100 : 3 200 : inf
+    // inputs[6] = this.y; // 100 : 4 224 : inf
+    inputs[6]=this.width; //100:4 1000 : 6
     let output = this.brain.predict(inputs);
     //if (output[0] > output[1] && this.velocity >= 0) {
     if (output[0] > 0.5) {
@@ -78,5 +70,13 @@ class paddle{
     }else{
       
     }
+  }
+}
+
+function creationPaddle() {
+
+  for (i = 0; i < PaddleTotal; i++) {
+    PaTab[i] = 0;
+    PaTab[i] = new paddle();
   }
 }
