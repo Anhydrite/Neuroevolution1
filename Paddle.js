@@ -13,7 +13,7 @@ class paddle{
         if (brain) {
             this.brain = brain.copy();
           } else {
-            this.brain = new NeuralNetwork(2,30,3);
+            this.brain = new NeuralNetwork(2,30,2);
           }
     }
     
